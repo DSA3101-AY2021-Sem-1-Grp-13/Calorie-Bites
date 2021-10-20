@@ -1,0 +1,71 @@
+/**
+  Card
+**/
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    }
+
+.card-input-element {
+    display: none;
+}
+
+.card-input {
+    margin: 10px;
+    padding: 00px;
+}
+
+.card-input:hover {
+    cursor: pointer;
+}
+
+.column {
+    float: left;
+    max-width: 200px;
+    width: 200px;
+    padding: 0 10px;
+}
+
+
+/**
+  Table
+**/
+tr:nth-child(even){
+    background-color: #f2f2f2;
+}
+
+th, td {
+    padding: 15px;
+    text-align: center;
+}
+
+
+/**
+  Input
+**/
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+    text-align: center;
+}
+
+/* Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+    text-align: center;
+}
+
+
+/**
+  Button
+**/
+.btn-primary{
+    background-color: rgb(0, 89, 255);
+}
+
+.btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active{
+    filter: brightness(0.9);
+    background-color: rgb(0, 89, 255);
+}
