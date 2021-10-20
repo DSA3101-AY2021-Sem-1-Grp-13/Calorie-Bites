@@ -1,0 +1,217 @@
+{% extends "base.html" %}
+
+{% block body %}
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/custom2.css') }}">
+<center>
+    <div>
+        Your recommended calorie intake per day is <b>{{ opt }}</b> kcal. 
+    </div>
+
+    <br>
+
+    {% if data|length == 2 %}
+        <div>
+            Well done, total calorie per day of your current basket is <b>{{ data[0] | int }}</b> kcal, which is within the recommended calorie intake per day!
+        </div>
+        <br>
+        <div>
+            <a href="/reset" class="btn btn-success">Home</a>
+        </div>
+    {% elif data|length == 3 %}
+        <div>
+            Total calorie per day of your current basket is <b>{{ data[0] | int }}</b> kcal, which has exceeded the recommended calorie intake per day by <b>{{ data[1] | int }}</b> kcal.
+        </div>
+        <br>
+        <div>
+            Don't worry, it is still within an acceptable range. You can do better next time!
+        </div>       
+        <br>
+        <div>
+            <a href="/reset" class="btn btn-success">Home</a>
+        </div>
+    {% else %}
+        <div>
+            Total calorie per day of your current basket is <b>{{ cal_to_print | int }}</b> kcal, which has exceeded the recommended calorie intake per day by a lot.
+        </div>
+        <br>
+        {% if indicator == 1 %}
+            <div>
+                We suggest to change the following product(s):
+            </div>
+            <br>
+            <table style="border: 1px solid black;">
+                <thead>
+                    <tr class="table-info" style="border: 1px solid black;">
+                        <th style="border: 1px solid black;">Initial Product</th>
+                        <th style="border: 1px solid black;">Suggested Product</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in sub %}
+                    <tr>
+                        {% for cell in row %}
+                        <td style="border: 1px solid black;">{{ cell }}</td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <br>
+            <div>
+                New total calorie per day would become <b>{{ (data['total_calorie']/7) | int }}</b> kcal.
+            </div>
+            <br>
+            <div>
+                <a href="/change" class="btn btn-success">Disagree</a>
+                &nbsp;
+                &nbsp;
+                <a href="/reset" class="btn btn-success">Home</a>
+            </div>
+
+        {% elif indicator == 2 %}
+            <div>
+                We suggest to change the following product(s):
+            </div>
+
+            <table style="border: 1px solid black;">
+                <thead>
+                    <tr class="table-info" style="border: 1px solid black;">
+                        <th style="border: 1px solid black;">Initial Product</th>
+                        <th style="border: 1px solid black;">Suggested Product</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in sub %}
+                    <tr>
+                        {% for cell in row %}
+                        <td style="border: 1px solid black;">{{ cell }}</td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <br>
+            <div>
+                We suggest to change the quantity of the following product(s):
+            </div>
+            <table style="border: 1px solid black;">
+                <thead>
+                    <tr class="table-info" style="border: 1px solid black;">
+                        <th style="border: 1px solid black;">Product</th>
+                        <th style="border: 1px solid black;">Initial Amt</th>
+                        <th style="border: 1px solid black;">New Amt</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in amt_sub %}
+                    <tr>
+                        {% for cell in row %}
+                        <td style="border: 1px solid black;">{{ cell }}</td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <br>
+            <div>
+                New total calorie per day would become <b>{{ (data['total_calorie']/7) | int }}</b> kcal.
+            </div>
+            <br>
+            <div>
+                <a href="/change" class="btn btn-success">Disagree</a>
+                &nbsp;
+                &nbsp;
+                <a href="/reset" class="btn btn-success">Home</a>
+            </div>   
+            
+        {% elif indicator == 3 %}
+            <div>
+                Total calories of your current basket cannot be reduced unless you remove some products.
+            </div>
+
+            <div>
+                Please try to remove some products that are not essential to you and try again :)
+            </div>
+            <br>
+            <div>
+                <a href="/reset" class="btn btn-success">Home</a>
+            </div>
+        
+        {% elif indicator == 4 %}
+        <div>
+            We suggest to change the quantity of the following product(s):
+        </div>
+
+        <table style="border: 1px solid black;">
+            <thead>
+                <tr class="table-info" style="border: 1px solid black;">
+                    <th style="border: 1px solid black;">Product</th>
+                    <th style="border: 1px solid black;">Initial Amt</th>
+                    <th style="border: 1px solid black;">New Amt</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in amt_sub %}
+                <tr>
+                    {% for cell in row %}
+                    <td style="border: 1px solid black;">{{ cell }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <br>
+        <div>
+            New total calorie per day would become <b>{{ (data['total_calorie']/7) | int }}</b> kcal.
+        </div>
+        <br>
+        <div>
+            <a href="/reset" class="btn btn-success">Home</a>
+        </div>
+
+        {% else %}
+
+        {% endif %}
+
+    {% endif %}
+        
+</center>
+
+<br>
+<br>
+
+<h2>Basket</h2>
+<div class="row">
+    {% for row in cart %}
+    <label>
+        <div class="column card-input">
+            <div class="card bg-light mb-3">
+                <div class="card-header align-items-center d-flex justify-content-center">
+                    <figure>
+                        <img src="{{ row[2] }}" width="80" />
+                        <figcaption style="text-align: center;">{{   row[0]   }}</figcaption>
+                    </figure>
+                </div>
+                <div class="card-body align-items-center d-flex justify-content-center" style="text-align: center;font-size: 20px;">
+                    {{   row[1]   }}
+                </div>
+
+            </div>
+        </div>
+    </label>
+    {% endfor %}
+</div>
+
+{% if data|length == 2 %}
+Total price of basket is <b>RM{{ '%0.2f'| format(data[1]) }}</b>
+{% elif data|length == 3 %}
+Total price of basket is <b>RM{{ '%0.2f'| format(data[2]) }}</b>
+{% else %}
+Total price of basket is <b>RM{{ '%0.2f'| format(data['total_price']) }}</b>
+{% endif %}
+
+<br>
+<br>
+<br>
+{% endblock body %}

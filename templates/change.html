@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block body %}
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/custom2.css') }}">
+
+<script>
+    function changeReasonClass(){
+        const val = document.querySelector('input[name="reason"]:checked').value;
+        if (val == "dislike"){
+            document.getElementById("R1").className = "card text-white bg-danger mb-3"; // Set Male
+            document.getElementById("R2").className = "card bg-light mb-3"; // Reset Female
+        }
+        else if (val == "expensive"){
+            document.getElementById("R2").className = "card text-white bg-danger mb-3"; // Set Female
+            document.getElementById("R1").className = "card bg-light mb-3"; // Reset Male
+        }
+    }
+</script>
+
+<form action="/resultchanged" method="POST">
+
+    <h3>Modifications</h3>
+
+    <table style="border: 1px solid black;">
+        <thead>
+            <tr class="table-info">
+                <th>Suggested Product</th>
+                <th>New Product</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for prod in sub %}
+            <tr>
+                <td>{{ prod[0] }}</td>
+                <td>
+                    <input class="form-check-input" type="checkbox" value="Yes" name="product_category_{{ prod[1] }}" style="float: left;margin: 0 auto;">
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <br>
+
+    <h3>Reason for Change</h3>
+
+    <div class="row">
+        <label>
+            <input type="radio" name="reason" class="card-input-element" id="reason1" value="dislike" onclick="changeReasonClass()" required>
+            <div class="column card-input">
+                <div class="card bg-light mb-3" id="R1">
+                    <div class="card-header align-items-center d-flex justify-content-center"><img src="{{url_for('static', filename='misc_images/dislike.png')}}" width="50"></div>
+                    <div class="card-body align-items-center d-flex justify-content-center">
+                        <h5>Dislike</h5>
+                    </div>
+                </div>
+            </div>
+        </label>
+        <label>
+            <input type="radio" name="reason" class="card-input-element" id="reason2" value="expensive" onclick="changeReasonClass()">
+            <div class="column card-input">
+                <div class="card bg-light mb-3" id="R2">
+                    <div class="card-header align-items-center d-flex justify-content-center"><img src="{{url_for('static', filename='misc_images/expensive.png')}}" width="50"></div>
+                    <div class="card-body align-items-center d-flex justify-content-center">
+                        <h5>Expensive</h5>
+                    </div>
+                </div>
+            </div>
+        </label>
+
+    </div>
+
+    <button type="submit" class="btn btn-success" style="margin-bottom: 50px;">Submit</button>
+
+</form>
+
+
+
+
+
+
+
+
+{% endblock body %}

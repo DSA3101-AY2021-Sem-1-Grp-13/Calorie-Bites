@@ -1,0 +1,287 @@
+{% extends "base.html" %}
+
+
+{% block body %}
+<script src="{{ url_for('static', filename='addcart.js') }}"></script>
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/custom2.css') }}">
+
+<script>
+    function changeGenderClass(){
+        const val = document.querySelector('input[name="gender"]:checked').value;
+        if (val == "male"){
+            document.getElementById("M").className = "card text-white bg-info mb-3"; // Set Male
+            document.getElementById("F").className = "card bg-light mb-3"; // Reset Female
+        }
+        else if (val == "female"){
+            document.getElementById("F").className = "card text-white bg-secondary mb-3"; // Set Female
+            document.getElementById("M").className = "card bg-light mb-3"; // Reset Male
+        }
+    }
+
+    function changeAgeClass(){
+        const val = document.querySelector('input[name="age"]:checked').value;
+        if (val == "1"){
+            document.getElementById("A1").className = "card text-white bg-success mb-3"; // Set A1
+            document.getElementById("A2").className = "card bg-light mb-3"; // Reset A2
+            document.getElementById("A3").className = "card bg-light mb-3"; // Reset A3
+        }
+        else if (val == "2"){
+            document.getElementById("A2").className = "card text-white bg-success mb-3"; // Set A2
+            document.getElementById("A1").className = "card bg-light mb-3"; // Reset A1
+            document.getElementById("A3").className = "card bg-light mb-3"; // Reset A3
+        }
+        else if (val == "4"){
+            document.getElementById("A3").className = "card text-white bg-success mb-3"; // Set A3
+            document.getElementById("A1").className = "card bg-light mb-3"; // Reset A1
+            document.getElementById("A2").className = "card bg-light mb-3"; // Reset A2
+        }
+    }
+
+    function changeActivityClass(){
+        const val = document.querySelector('input[name="activity"]:checked').value;
+        if (val == "1"){
+            document.getElementById("O1").className = "card text-white bg-success mb-3"; // Set O1
+            document.getElementById("O2").className = "card bg-light mb-3"; // Reset O2
+            document.getElementById("O3").className = "card bg-light mb-3"; // Reset O3
+            document.getElementById("O4").className = "card bg-light mb-3"; // Reset O4
+        }
+        else if (val == "2"){
+            document.getElementById("O2").className = "card text-white bg-success mb-3"; // Set O2
+            document.getElementById("O1").className = "card bg-light mb-3"; // Reset O1
+            document.getElementById("O3").className = "card bg-light mb-3"; // Reset O3
+            document.getElementById("O4").className = "card bg-light mb-3"; // Reset O4
+        }
+        else if (val == "3"){
+            document.getElementById("O3").className = "card text-white bg-success mb-3"; // Set O3
+            document.getElementById("O1").className = "card bg-light mb-3"; // Reset O1
+            document.getElementById("O2").className = "card bg-light mb-3"; // Reset O2
+            document.getElementById("O4").className = "card bg-light mb-3"; // Reset O4
+        }
+        else if (val == "4"){
+            document.getElementById("O4").className = "card text-white bg-success mb-3"; // Set O4
+            document.getElementById("O1").className = "card bg-light mb-3"; // Reset O1
+            document.getElementById("O2").className = "card bg-light mb-3"; // Reset O2
+            document.getElementById("O3").className = "card bg-light mb-3"; // Reset O3
+        }
+    }
+</script>
+
+<h2>Shopping Basket <i class="fas fa-shopping-basket"></i></h2>
+<form action="{{ url_for('.add_to_cart') }}" method="POST" id="add_cart">
+    <div style="margin-bottom: 10px;">
+        <label style="display: inline-block;width:60px;text-align: right;">Product</label>
+        <input list="category" name="product_category" style="text-align: center;">
+        <datalist id="category">
+            {% for prod in all_prod %}
+            <option>{{prod}}</option>
+            {% endfor %}          
+        </datalist>
+    </div>
+
+    <div style="margin-bottom: 10px;">
+        <label style="display: inline-block;width:60px;text-align: right;">Quantity</label>
+        <input type="number" name="quantity" id="quantity" style="width: 7em;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+        <button type="submit" class="btn btn-primary btn-sm" onclick="addtocart();">Add to Cart</button>
+    </div>
+
+</form>
+
+<div id="shopping-cart" style="margin-top: 20px;">
+    {% if data != [] %}
+        <table>
+            <thead>
+                <tr class="table-info">
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Remove</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in data %}
+                <tr>
+                    {% for cell in row %}
+                    <td>{{ cell }}</td>
+                    {% endfor %}
+                    <form action="{{ url_for('.remove_from_cart') }}" method="POST" id="remove_cart">
+                        <td style="text-align: center;"><a href="/remove" onclick="removefromcart(this.id);" id="{{ row[0] }}"><i class="fas fa-trash-alt"></i></a></td>
+                    </form>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <form action="/removeall" method="POST">
+            <button type="submit" class="btn btn-danger btn-sm"  style="margin-left: auto;margin-top: 10px;">Remove All</button>
+        </form>
+    {% else %}
+        <div class="alert alert-dismissible alert-success" style="width: 300px;height: 50px;">
+            <h5 style="position:absolute;left: 76px;">Cart is empty!</h5>
+        </div>
+    {% endif %}
+</div>
+
+<form action="/result" method="POST">
+    <h2 style="margin-top: 40px;">Gender</h2>
+    <div class="row">
+        <label>
+            <input type="radio" name="gender" class="card-input-element" id="gender1" value="male" onclick="changeGenderClass()" required>
+            <div class="column card-input">
+                <div class="card bg-light mb-3" id="M">
+                    <div class="card-header align-items-center d-flex justify-content-center"><i class="fas fa-male fa-3x"></i></div>
+                    <div class="card-body align-items-center d-flex justify-content-center">
+                        <h3>Male</h3>
+                    </div>
+                </div>
+            </div>
+        </label>
+
+        <label>
+            <input type="radio" name="gender" class="card-input-element" id="gender2" value="female" onclick="changeGenderClass()">
+            <div class="column card-input">
+                <div class="card bg-light mb-3" id="F">
+                    <div class="card-header align-items-center d-flex justify-content-center"><i class="fas fa-female fa-3x"></i></div>
+                    <div class="card-body align-items-center d-flex justify-content-center">
+                        <h3>Female</h3>
+                    </div>
+                </div>
+            </div>
+        </label>
+
+    </div>
+    
+    <h2>Weight</h2>
+    <div class="row">
+        <div class="column card-input">
+            <div class="card bg-light mb-3">
+                <div class="card-header align-items-center d-flex justify-content-center"><i class="fas fa-weight fa-3x"></i></div>
+                <div class="card-body align-items-center d-flex justify-content-center">
+                    <!-- https://www.techiedelight.com/restrict-html-input-text-box-to-allow-only-numeric-values/ -->
+                    <input type="number" name="weight" style="width: 5em" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" required>&nbsp;&nbsp;kg 
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h2>Age</h2>
+    <div class="row">
+        <label>
+            <input type="radio" name="age" class="card-input-element"  value="1" onclick="changeAgeClass()" required>
+            <div class="column card-input">
+                <div class="card bg-light mb-3" id="A1">
+                    <div class="card-header align-items-center d-flex justify-content-center">
+                        <img src="{{url_for('static', filename='misc_images/teen.png')}}" width="80" />
+                    </div>
+                    <div class="card-body align-items-center d-flex justify-content-center">
+                        <p style="text-align:center;font-size: 22px;">7-29</p>
+                    </div>
+                </div>
+            </div>
+        </label>
+
+        <label>
+            <input type="radio" name="age" class="card-input-element" value="2" onclick="changeAgeClass()">
+            <div class="column card-input">
+                <div class="card bg-light mb-3" id="A2">
+                    <div class="card-header align-items-center d-flex justify-content-center">
+                        <img src="{{url_for('static', filename='misc_images/employee.png')}}" width="80" />
+                    </div>
+                    <div class="card-body align-items-center d-flex justify-content-center">
+                        <p style="text-align:center;font-size: 22px;">30-59</p>
+                    </div>
+                </div>
+            </div>
+        </label>
+
+        <label>
+            <input type="radio" name="age" class="card-input-element" value="4" onclick="changeAgeClass()">
+            <div class="column card-input">
+                <div class="card bg-light mb-3" id="A3">
+                    <div class="card-header align-items-center d-flex justify-content-center">
+                        <img src="{{url_for('static', filename='misc_images/old-man.png')}}" width="80" />
+                    </div>
+                    <div class="card-body align-items-center d-flex justify-content-center">
+                        <p style="text-align:center;font-size: 22px;">60 and above</p>
+                    </div>
+                </div>
+            </div>
+        </label>
+
+    </div>
+
+    <h2>Daily Activity Level</h2>
+    <div class="row">
+        <label>
+            <input type="radio" name="activity" class="card-input-element" value="1" onclick="changeActivityClass()" required>
+            <div class="column card-input">
+                <div class="card bg-light mb-3" id="O1" style="height: 300px;">
+                    <div class="card-header align-items-center d-flex justify-content-center">
+                        <img src="{{url_for('static', filename='misc_images/sitting.png')}}" width="80" />
+                    </div>
+                    <div class="card-body align-items-center d-flex justify-content-center" style="padding: 0%;">
+                        <p style="text-align:center;font-size: 20px;">Seated most of the day</p>
+                    </div>
+                    <div class="card-body align-items-center d-flex justify-content-center" style="padding: 0%;">
+                        <p style="text-align:center;font-size: 15px;">E.g. Office worker; Taxi Driver</p>
+                    </div>
+                </div>
+            </div>
+        </label>
+
+        <label>
+            <input type="radio" name="activity" class="card-input-element" value="2" onclick="changeActivityClass()">
+            <div class="column card-input">
+                <div class="card bg-light mb-3" id="O2" style="height: 300px;">
+                    <div class="card-header align-items-center d-flex justify-content-center">
+                        <img src="{{url_for('static', filename='misc_images/standing.png')}}" width="80" />
+                    </div>
+                    <div class="card-body align-items-center d-flex justify-content-center" style="padding: 0%;">
+                        <p style="text-align:center;font-size: 20px;">Standing for about half the time</p>
+                    </div>
+                    <div class="card-body align-items-center d-flex justify-content-center" style="padding: 0%;">
+                        <p style="text-align:center;font-size: 15px;">E.g. Lecturer; Corporate Trainer</p>
+                    </div>
+                </div>
+            </div>
+        </label>
+
+        <label>
+            <input type="radio" name="activity" class="card-input-element" value="3" onclick="changeActivityClass()">
+            <div class="column card-input">
+                <div class="card bg-light mb-3" id="O3" style="height: 300px;">
+                    <div class="card-header align-items-center d-flex justify-content-center">
+                        <img src="{{url_for('static', filename='misc_images/walking.png')}}" width="80" />
+                    </div>
+                    <div class="card-body align-items-center d-flex justify-content-center" style="padding: 0%;">
+                        <p style="text-align:center;font-size: 20px;">Walking about half the time</p>
+                    </div>
+                    <div class="card-body align-items-center d-flex justify-content-center" style="padding: 0%;">
+                        <p style="text-align:center;font-size: 15px;">E.g. Factory Supervisor; Waiter</p>
+                    </div>
+                </div>
+            </div>
+        </label>
+
+        <label>
+            <input type="radio" name="activity" class="card-input-element" value="4" onclick="changeActivityClass()">
+            <div class="column card-input">
+                <div class="card bg-light mb-3" id="O4" style="height: 300px;">
+                    <div class="card-header align-items-center d-flex justify-content-center">
+                        <img src="{{url_for('static', filename='misc_images/running.png')}}" width="80" />
+                    </div>
+                    <div class="card-body align-items-center d-flex justify-content-center" style="padding: 0%;">
+                        <p style="text-align:center;font-size: 20px;">Constantly on the move</p>
+                    </div>
+                    <div class="card-body align-items-center d-flex justify-content-center" style="padding: 0%;">
+                        <p style="text-align:center;font-size: 15px;">E.g. Army Trainee; Delivery Man</p>
+                    </div>
+                </div>
+            </div>
+        </label>
+
+    </div>
+
+    <button type="submit" class="btn btn-success" style="margin-bottom: 50px;">Submit</button>
+</form>
+
+
+<div style="font-size: 12px;position: fixed;bottom: 0;right: 0;">Icons made by <a href="https://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
+{% endblock %}

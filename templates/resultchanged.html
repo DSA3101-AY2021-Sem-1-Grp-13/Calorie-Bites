@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block body %}
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/custom2.css') }}">
+
+<center>
+    {% if error %}
+        <div>
+            Sorry, this is the optimal recommendation for you!
+        </div>
+        <br>
+    {% else %}
+        {% for pair in replacements %}
+            <div style="padding-bottom: 10px;">
+                You can replace <b>{{ pair[0] }}</b> with <b>{{ pair[1] }}</b>
+            </div>
+        {% endfor %}
+
+        <div style="padding-bottom: 10px;">
+            Recommended calorie intake per day is <b>{{ recommended_calorie }}</b> kcal.
+        </div>
+
+        <div style="padding-bottom: 10px;">
+            Total calorie per day of your new basket is <b>{{ basket_calorie | int }}</b> kcal.
+        </div>
+
+    {% endif %}
+    <div>
+        <a href="/reset" class="btn btn-success">Home</a>
+    </div>
+</center>
+
+<h2>Basket</h2>
+<div class="row">
+    {% for row in cart %}
+    <label>
+        <div class="column card-input">
+            <div class="card bg-light mb-3">
+                <div class="card-header align-items-center d-flex justify-content-center">
+                    <figure>
+                        <img src="{{ row[2] }}" width="80" />
+                        <figcaption style="text-align: center;">{{   row[0]   }}</figcaption>
+                    </figure>
+                </div>
+                <div class="card-body align-items-center d-flex justify-content-center" style="text-align: center;font-size: 20px;">
+                    {{   row[1]   }}
+                </div>
+
+            </div>
+        </div>
+    </label>
+    {% endfor %}
+</div>
+
+Total price of basket is <b>RM{{ '%0.2f'| format(total_price) }}</b>
+<br>
+<br>
+<br>
+
+{% endblock body %}
