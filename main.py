@@ -1,13 +1,36 @@
-from flask import Blueprint, render_template, redirect, request, url_for, session
-from numpy import product
+from flask import render_template, redirect, request, url_for, session, Flask
+from flask_sqlalchemy import SQLAlchemy
 
-from .algo import optimal_basket, change_product
-from . import db
-from .models import Cart
-from .calories import optimal_calories
+from algo import optimal_basket, change_product
+from calories import optimal_calories
 
 import pandas as pd
 import os
+
+# init SQLAlchemy so we can use it later in our models
+db = SQLAlchemy()
+
+class Cart(db.Model):
+    product = db.Column(db.String(100), primary_key=True)
+    quantity = db.Column(db.Integer, nullable=False)
+
+    def __init__(self, product, quantity):
+        self.product=product
+        self.quantity=quantity
+
+def create_app():
+    app = Flask(__name__)
+
+    app.config['SECRET_KEY'] = 'terry_jieyi_qiting_zhuolin_kaychi_zhongping_nigel'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+    db.init_app(app)
+
+    with app.app_context():
+        db.create_all()
+
+    return app
 
 # Read Data
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -18,7 +41,7 @@ all_prod = list(map(lambda x: x.title(), all_prod))
 
 substitute_df = pd.read_csv(os.path.join(basedir, 'data', 'Product Substitution.csv'))
 
-main = Blueprint('main', __name__)
+main = create_app()
     
 ###################################
 #                                 #
@@ -68,7 +91,7 @@ def add_to_cart():
 def remove_from_cart():
     if request.method == 'POST':
         data = request.get_json()
-        product= data[0]['id']
+        product= data['id']
 
         record = Cart.query.filter_by(product=product).first()
         db.session.delete(record)
