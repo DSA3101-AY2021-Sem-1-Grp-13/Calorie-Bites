@@ -30,7 +30,7 @@
     </div>
 </center>
 
-<h2>Basket</h2>
+<h2>Basket (Total Price: RM{{ '%0.2f'| format(total_price) }})</h2>
 <div class="row">
     {% for row in cart %}
     <label>
@@ -52,7 +52,6 @@
     {% endfor %}
 </div>
 
-Total price of basket is <b>RM{{ '%0.2f'| format(total_price) }}</b>
 <br>
 <br>
 <br>

@@ -176,6 +176,14 @@
         
 </center>
 
+{% if data|length == 2 %}
+<h2>Basket (Total Price: RM{{ '%0.2f'| format(data[1]) }})</h2>
+{% elif data|length == 3 %}
+<h2>Basket (Total Price: RM{{ '%0.2f'| format(data[2]) }})</h2>
+{% else %}
+<h2>Basket (Total Price: RM{{ '%0.2f'| format(data['total_price']) }})</h2>
+{% endif %}
+
 <h2>Basket</h2>
 <div class="row">
     {% for row in cart %}
@@ -197,12 +205,6 @@
     {% endfor %}
 </div>
 
-{% if data|length == 2 %}
-Total price of basket is <b>RM{{ '%0.2f'| format(data[1]) }}</b>
-{% elif data|length == 3 %}
-Total price of basket is <b>RM{{ '%0.2f'| format(data[2]) }}</b>
-{% else %}
-Total price of basket is <b>Rm{{ '%0.2f'| format(data['total_price']) }}</b>
-{% endif %}
+
 
 {% endblock body %}
