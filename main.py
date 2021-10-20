@@ -383,7 +383,3 @@ def changed_result():
     print(new_cart)
 
     return render_template('resultchanged.html', replacements = replacements, error=error, recommended_calorie=recommended_calorie, total_price=total_price, basket_calorie=basket_calorie, cart=new_cart, pic=pic)
-
-
-if __name__ == "__main__":
-    main.run()
