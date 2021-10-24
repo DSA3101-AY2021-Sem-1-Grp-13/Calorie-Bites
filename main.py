@@ -91,7 +91,7 @@ def add_to_cart():
 def remove_from_cart():
     if request.method == 'POST':
         data = request.get_json()
-        product= data['id']
+        product= data[0]['id']
 
         record = Cart.query.filter_by(product=product).first()
         db.session.delete(record)
