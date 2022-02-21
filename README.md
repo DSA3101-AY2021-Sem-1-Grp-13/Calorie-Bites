@@ -16,3 +16,9 @@ A webapp created for DSA3101 Kantar Hackathon 2021
  3. Open the localhost link in your preferred web browser
 
 Link to hosted website: https://caloriebites.herokuapp.com/
+
+## Packages required:
+* Flask == 2.0.1
+* Flask_SQLAlchemy == 2.5.1
+* numpy == 1.21.0
+* pandas == 1.3.0
