@@ -1,6 +1,6 @@
 # Calorie-Bites
 
-A webapp created for DSA3101 Kantar Hackathon 2021
+A webapp created for DSA3101 Kantar Hackathon 2021. Built by [Terry Lim](https://github.com/terrylimxc)
 
 ## Setup:
 1. Clone/Download the repository
